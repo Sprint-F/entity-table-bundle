@@ -15,13 +15,13 @@ class SprintFEntityTableBundle extends AbstractBundle
         return dirname(__DIR__);
     }
 
-    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    public function loadExtension(array $config, ContainerConfigurator $configurator, ContainerBuilder $container): void
     {
-        $container->import('../config/services.yaml');
+        $configurator->import('../config/services.yaml');
     }
 
-    public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
+    public function prependExtension(ContainerConfigurator $configurator, ContainerBuilder $container): void
     {
-        $container->import('../config/packages/twig_component.yaml');
+        $configurator->import('../config/packages/twig_component.yaml');
     }
 }
