@@ -14,6 +14,8 @@
     "homepage": "https://sprintf.ru",
     "require": {
         "php": "^8.4",
+        "doctrine/orm": "^3.6",
+        "doctrine/doctrine-bundle": "*",
         "sprintf/symfony-metadata-loader": "^1.2.1",
         "sprintf/value-objects": "*",
         "symfony/dependency-injection": "^7.4 || ^8.0",
