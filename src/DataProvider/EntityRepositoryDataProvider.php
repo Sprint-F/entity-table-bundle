@@ -16,7 +16,15 @@ class EntityRepositoryDataProvider implements EntityTableDataProviderInterface
     public function __construct(
         protected ServiceEntityRepository $repository,
     ) {
-        $this->queryBuilder = $this->repository->createQueryBuilder('entity');
+        $this->queryBuilder = $this->repository->createQueryBuilder($this->getRootAlias());
+    }
+
+    /**
+     * Алиас для основной сущности, по которой строится таблица.
+     */
+    protected function getRootAlias(): string
+    {
+        return 'entity';
     }
 
     public function withScope(Criteria $scope): EntityTableDataProviderInterface
