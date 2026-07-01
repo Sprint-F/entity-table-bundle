@@ -74,18 +74,54 @@
     {% endif %}
 {% endmacro %}
 
-<div {{ attributes }}>
-    <p>Page: {{ this.page }}</p>
-    <p>Per Page: {{ this.perPage }}</p>
+<div {{ attributes }} data-loading="addClass(opacity-50)">
 
-    <select data-model="perPage">
-        <option>5</option>
-        <option>10</option>
-        <option>25</option>
-        <option>50</option>
-        <option>100</option>
-    </select>
-
-    {{ _self.pager(20, this.page) }}
+    <div class="card">
+        <div class="card-header border-bottom-0">
+            <h3 class="display-3 m-0">Список...</h3>
+        </div>
+        <div class="card-body p-0">
+            <p>Page: {{ this.page }}</p>
+            <p>Per Page: {{ this.perPage }}</p>
+            <table class="table table-hover table-bordered m-0">
+                <tr>
+                    <th class="text-center">Пример</th>
+                    <th class="text-center">Таблицы</th>
+                    <th class="text-center">С данными</th>
+                </tr>
+                <tr style="transform: rotate(0);">
+                    <td>11</td>
+                    <td>12</td>
+                    <td>13</td>
+                </tr>
+                <tr style="transform: rotate(0);">
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                </tr>
+                <tr style="transform: rotate(0);">
+                    <td>31</td>
+                    <td>32</td>
+                    <td>33</td>
+                </tr>
+            </table>
+        </div>
+        <div class="card-footer border-top-0 m-0 p-1 row justify-content-between">
+            <div class="col-auto">
+                <nav>
+                    <select class="form-select form-select-sm" style="font-size: 0.75rem !important;" data-model="perPage">
+                        <option>5</option>
+                        <option>10</option>
+                        <option>25</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                </nav>
+            </div>
+            <div class="col-auto">
+                {{ _self.pager(20, this.page) }}
+            </div>
+        </div>
+    </div>
 
 </div>
