@@ -1,3 +1,17 @@
 <div {{ attributes }}>
+    <p>Page: {{ this.page }}</p>
+    <p>Per Page: {{ this.perPage }}</p>
+
+    <select data-model="perPage">
+        <option>5</option>
+        <option>10</option>
+        <option>25</option>
+        <option>50</option>
+        <option>100</option>
+    </select>
+
+    <button type="button" data-model="page" data-value="1" data-action="live#update">1</button>
+    <button type="button" data-model="page" data-value="2" data-action="live#update">2</button>
+    <button type="button" data-model="page" data-value="3" data-action="live#update">3</button>
 
 </div>

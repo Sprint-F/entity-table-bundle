@@ -4,8 +4,6 @@ namespace SprintF\Bundle\EntityTable\Component;
 
 use SprintF\Metadata\Mapping\Attribute\MetadataAttribute;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
-use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
@@ -26,28 +24,16 @@ class EntityTableComponent
     }
 
     /**
-     * @todo: Возможно, удалить. Достаточно ли LiveProp $page?
-     */
-    #[LiveAction]
-    public function changePage(#[LiveArg] int $page): void
-    {
-        $this->page = $page;
-    }
-
-    /**
      * Количество элементов на страницу для постраничного отображения.
      */
-    #[LiveProp(writable: true)]
+    #[LiveProp(writable: true, onUpdated: 'onPerPageUpdated')]
     public int $perPage = 25;
 
-    /**
-     * @todo: Возможно, удалить. Достаточно ли LiveProp $perPage?
-     */
-    #[LiveAction]
-    public function changePerPage(#[LiveArg] int $perPage): void
+    public function onPerPageUpdated($previousValue): void
     {
-        $this->perPage = $perPage;
-        $this->resetPage();
+        if ($previousValue !== $this->perPage) {
+            $this->resetPage();
+        }
     }
 
     /**
