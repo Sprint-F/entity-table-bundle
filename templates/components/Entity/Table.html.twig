@@ -1,3 +1,79 @@
+{% macro pager(total, current) %}
+    {% if total > 0 %}
+        {# Вычисляем список элементов пагинации #}
+        {% if total <= 9 %}
+            {# Если страниц 9 или меньше - выводим все #}
+            {% set pages = range(1, total) %}
+        {% else %}
+            {# Страниц больше 9 –  выводим диапазоны страниц с троеточиями между ними #}
+            {% if current <= 5 %}
+                {# Если текущая страница ближе к началу #}
+                {# Выводим страницы с 1 по current+1, затем троеточие, затем две последние страницы  #}
+                {# Например: 1,2,3,4,5,6, ..., 9,10 (при total=10, current=4) #}
+                {% set pages = range(1, current + 1)|merge(['...'])|merge(range(total - 1, total)) %}
+            {% elseif current >= total - 4 %}
+                {# Если текущая страница ближе к концу #}
+                {# Выводим первые две страницы, троеточие, затем страницы с current-1 до total #}
+                {# Например: 1,2, ..., 7,8,9,10 (при total=10, current=8) #}
+                {% set pages = range(1, 2)|merge(['...'])|merge(range(current - 1, total)) %}
+            {% else %}
+                {# Если текущая страница в середине диапазона #}
+                {# Выводим первые две страницы, троеточие, блок из текущей с соседями, троеточие, две последние #}
+                {# Например: 1,2, ..., 5,6,7, ..., 24,25 (при total=25, current=6) #}
+                {% set pages = range(1, 2)|merge(['...'])|merge(range(current - 1, current + 1))|merge(['...'])|merge(range(total - 1, total)) %}
+            {% endif %}
+        {% endif %}
+
+        <nav>
+            <ul class="pagination pagination-sm mb-0" style="--bs-pagination-font-size: 0.75rem !important;">
+                {% if current > 1 %}
+                    <li class="page-item">
+                        <button type="button" class="page-link" data-model="page" data-value="1" data-action="live#update">&lt;&lt;</button>
+                    </li>
+                    <li class="page-item">
+                        <button type="button" class="page-link" data-model="page" data-value="{{ current - 1 }}" data-action="live#update">&lt;</button>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&lt;&lt;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">&lt;</span>
+                    </li>
+                {% endif %}
+
+                {% for page in pages %}
+                    {% if page == '...' %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item{% if current == page %} active{% endif %}">
+                            <button type="button" class="page-link" data-model="page" data-value="{{ page }}" data-action="live#update">{{ page }}</button>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if current < total %}
+                    <li class="page-item">
+                        <button type="button" class="page-link" data-model="page" data-value="{{ current + 1 }}" data-action="live#update">&gt;</button>
+                    </li>
+                    <li class="page-item">
+                        <button type="button" class="page-link" data-model="page" data-value="{{ total }}" data-action="live#update">&gt;&gt;</button>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&gt;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">&gt;&gt;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endmacro %}
+
 <div {{ attributes }}>
     <p>Page: {{ this.page }}</p>
     <p>Per Page: {{ this.perPage }}</p>
@@ -10,8 +86,6 @@
         <option>100</option>
     </select>
 
-    <button type="button" data-model="page" data-value="1" data-action="live#update">1</button>
-    <button type="button" data-model="page" data-value="2" data-action="live#update">2</button>
-    <button type="button" data-model="page" data-value="3" data-action="live#update">3</button>
+    {{ _self.pager(20, this.page) }}
 
 </div>
